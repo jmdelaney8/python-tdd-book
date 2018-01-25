@@ -24,7 +24,7 @@ class NewVisitorTest(unittest.TestCase):
         self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter a to-do item')
         
         #she type in "buy feathers" and hits enter
-        inputbox.send_keys('Buy peakcock feathers')
+        inputbox.send_keys('Buy peacock feathers')
         
         #the page updates showing her to do
         inputbox.send_keys(Keys.ENTER)
@@ -32,18 +32,21 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Buy peacock feathers' for row in rows),
-            "New to-do item did not appear in table"
-        )
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 
         # and a box inviting her to add another to do
-        self.fail('Finish the test!')
-        
         #she types "use feathers to make fly" and hits enter
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Use peacock feather to make a fly')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
 
+        #The page updates with her two to-dos
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+        self.assertIn('2: Use peacock feathers to make a fly', [row.text for row in rows]) 
         #there is a uniquely generated URL for her and some explanatory text about how to reach this to-do list again
-
+        self.fail('finish the test') 
         #she visits that URL and the to-do list is still there
 
         #satisfied, she closes the browser
